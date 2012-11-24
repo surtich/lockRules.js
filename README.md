@@ -38,5 +38,11 @@ Algunas de las posibles soluciones de la comprobación en el cliente son:
 
 [LockRules.js](https://github.com/surtich/lockRules.js) es muy flexible, potente y configurable para adaptarse a todas las situaciones que se puedan plantear.
 
-[LockRules.js](https://github.com/surtich/lockRules.js) utiliza expresiones regulares o selectores CSS en la difinición de reglas.
+[LockRules.js](https://github.com/surtich/lockRules.js) utiliza expresiones regulares o selectores CSS en la definición de reglas.
+
+## Instalación
+
+[LockRules.js](https://github.com/surtich/lockRules.js) requiere [jQuery](http://http://jquery.com/) ######(pendiente comprobar la versión inferior que soportada).
+
+
 
