@@ -64,12 +64,14 @@ setTimeout(getProducts, 3000, 1);
 setTimeout(getProducts, 1000, 1);
 ```
 
-El primer "timer" simula una llamada AJAX en la que se prentenden recuperar los productos de la categoría 1.
+El primer "timer" simula una llamada AJAX en la que se pretenden recuperar los productos de la categoría 1.
 El segundo "timer" simula una segunda petición de AJAX en la que se vuelven a recuperar los mismos artículos anteriores.
 
-Esta situación se puede plantear si un usuario se cansa de esperar y trata de volver a obtener los productos pensando que de esta forma tendrá una respuesta más rápida. Normalmente querremos evitar situaciones como esta que lo único que van a conseguir es saturar la red. Si no hemos sido cuidadosos al programar la aplicación, es posible que además terminemos teniendo artículos duplicados en la aplciación Web.
+Esta situación se puede plantear si un usuario se cansa de esperar y trata de volver a obtener los productos pensando que de esta forma tendrá una respuesta más rápida. Normalmente querremos evitar situaciones como esta que lo único que van a conseguir es saturar la red. Si no hemos sido cuidadosos al programar la aplicación, es posible que además terminemos teniendo artículos duplicados en la aplicación Web.
 
-**¿Cómo podemos resolverlo con LockRules?:**
+Es preferible, que si la red está saturada, se produzca un "timeout" en la petición al servidor y que el usuario intente realizar la operación después de que se le informe del fallo.
+
+**Solución con LockRules:**
 
 Primero definamos la siguiente función:
 
@@ -87,23 +89,19 @@ function doWork(fnWork, lock, params) {
  }                
 }            }
 ```
-La función *doWork* recibe la función a ejecutar, el objeto de bloqueo *lock* (ver más adalente) y los parámetros de la función a ejecutar.
+La función *doWork* recibe la función a ejecutar, el objeto de bloqueo *lock* (ver más adelante) y los parámetros de la función a ejecutar.
 
 El funcionamiento básico de LockRules consiste en lo siguiente:
 
 1. Comprobar si el *lock* es compatible con los bloqueos actuales llamando a *checkLock*.
-2. Si el *lock* es compatible, añadir el *lock* a los bloqueos actuales.
-                                              
+2. Si el *lock* es compatible, añadir el *lock* a los bloqueos actuales llamando *addLock*.                                             
+3. Después llamar a la función.
+4. Por último, borrar el *lock*.
+5. Si el *lock* no es compatible, evitar la llamada a la función e informar al usuario.
 
+Podemos verlo gráficamente:
 
-
-Es preferible, que si la red está saturada, se produzca un "timeout" en la petición al servidor y que el usuario intente realizar la operación después de que se le informe del fallo.
-
-
-**Solución con LockRules:**
-
-
-
+![Ordinograma flujo de bloqueo](https://github.com/surtich/lockRules.js/blob/master/readme_files/lockFlow.png)
 
 
 ## Integración con AJAX
