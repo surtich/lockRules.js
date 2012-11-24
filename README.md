@@ -69,6 +69,34 @@ El segundo "timer" simula una segunda petición de AJAX en la que se vuelven a r
 
 Esta situación se puede plantear si un usuario se cansa de esperar y trata de volver a obtener los productos pensando que de esta forma tendrá una respuesta más rápida. Normalmente querremos evitar situaciones como esta que lo único que van a conseguir es saturar la red. Si no hemos sido cuidadosos al programar la aplicación, es posible que además terminemos teniendo artículos duplicados en la aplciación Web.
 
+**¿Cómo podemos resolverlo con LockRules?:**
+
+Primero definamos la siguiente función:
+
+```js
+function doWork(fnWork, lock, params) {                
+ if ($.lockRules('checkLock', lock)) {
+  $.lockRules('addLock', lock);                    
+  setTimeout(function() {
+    fnWork(params);
+    $.lockRules('removeLock', lock);
+   }
+ , 3000, params);
+ } else {
+  alert("Proccessing. Try it later")
+ }                
+}            }
+```
+La función *doWork* recibe la función a ejecutar, el objeto de bloqueo *lock* (ver más adalente) y los parámetros de la función a ejecutar.
+
+El funcionamiento básico de LockRules consiste en lo siguiente:
+
+1. Comprobar si el *lock* es compatible con los bloqueos actuales llamando a *checkLock*.
+2. Si el *lock* es compatible, añadir el *lock* a los bloqueos actuales.
+                                              
+
+
+
 Es preferible, que si la red está saturada, se produzca un "timeout" en la petición al servidor y que el usuario intente realizar la operación después de que se le informe del fallo.
 
 
