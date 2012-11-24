@@ -32,13 +32,9 @@ Algunas de las posibles soluciones de la comprobación en el cliente son:
  
 ## ¿Qué es LockRules.js?
 
-[LockRules.js](https://github.com/surtich/lockRules.js) es un plugin de [jQuery](http://http://jquery.com/) que permite resolver el problema planteado sin necesidad de escribir una sola línea de código.
+[LockRules.js](https://github.com/surtich/lockRules.js) es un plugin de [jQuery](http://http://jquery.com/) que permite resolver el problema planteado de una forma genérica, flexible, potente y configurable para adaptarse a todas las situaciones que se puedan plantear.
 
-[LockRules.js](https://github.com/surtich/lockRules.js) funciona definiendo una serie de reglas que permiten o impiden la ejecución de una función de Javascript.
-
-[LockRules.js](https://github.com/surtich/lockRules.js) es muy flexible, potente y configurable para adaptarse a todas las situaciones que se puedan plantear.
-
-[LockRules.js](https://github.com/surtich/lockRules.js) utiliza [expresiones regulares](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/RegExp) o [selectores CSS](http://www.w3.org/TR/selectors/) en la definición de reglas.
+[LockRules.js](https://github.com/surtich/lockRules.js) funciona definiendo una serie de reglas que permiten o impiden la ejecución de una función de Javascript. Las reglas se crean utilizando [expresiones regulares](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/RegExp) o [selectores CSS](http://www.w3.org/TR/selectors/).
 
 ## Instalación
 
@@ -53,8 +49,34 @@ Para utilizar LockRules debes incluir las siguientes etiquetas en la cabecera de
 
 ## Uso básico
 
-Nota importante: Los ejemplos simulan la ejecución de una llamada AJAX mediente un "timer" de Javascript. De esta forma, evitamos tener que configurar un servidor Web para probar la librería. Ver la sección ["Integración con AJAX"]
+Nota importante: Los ejemplos simulan la ejecución de una llamada AJAX mediente un "timer" de Javascript. De esta forma, evitamos tener que configurar un servidor Web para probar la librería. Ver la sección "Integración con AJAX".
+
+### Evitar rellamadas AJAX
+
+**Supongamos la siguiente situación:**
+
+```js
+function getProducts(categoryNumber) {
+ alert(categoryNumber);
+}
+                
+setTimeout(getProducts, 3000, 1);
+setTimeout(getProducts, 1000, 1);
+```
+
+El primer "timer" simula una llamada AJAX en la que se prentenden recuperar los productos de la categoría 1.
+El segundo "timer" simula una segunda petición de AJAX en la que se vuelven a recuperar los mismos artículos anteriores.
+
+Esta situación se puede plantear si un usuario se cansa de esperar y trata de volver a obtener los productos pensando que de esta forma tendrá una respuesta más rápida. Normalmente querremos evitar situaciones como esta que lo único que van a conseguir es saturar la red. Si no hemos sido cuidadosos al programar la aplicación, es posible que además terminemos teniendo artículos duplicados en la aplciación Web.
+
+Es preferible, que si la red está saturada, se produzca un "timeout" en la petición al servidor y que el usuario intente realizar la operación después de que se le informe del fallo.
 
 
-## (Integración con AJAX)
+**Solución con LockRules:**
+
+
+
+
+
+## Integración con AJAX
 
