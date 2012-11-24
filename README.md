@@ -10,7 +10,7 @@ Durante ese tiempo, el usuario puede interaccionar con la aplicación y realizar
 
 Algunas de estas acciones pueden ser incompatibles con la llamada de AJAX inicial que todavía está en curso.
 
-Ejemplo: Mientras se está procesando la compra de una cesta de productos, se tiene que impedir que el usuario modifique su contenido.
+Ejemplo: Mientras se está procesando la compra de una cesta de productos, se debe impedir que el usuario modifique su contenido.
 
 ## Posibles Soluciones 
 
