@@ -38,7 +38,7 @@ Algunas de las posibles soluciones de la comprobación en el cliente son:
 
 [LockRules.js](https://github.com/surtich/lockRules.js) es muy flexible, potente y configurable para adaptarse a todas las situaciones que se puedan plantear.
 
-[LockRules.js](https://github.com/surtich/lockRules.js) utiliza expresiones regulares o selectores CSS en la definición de reglas.
+[LockRules.js](https://github.com/surtich/lockRules.js) utiliza [expresiones regulares](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/RegExp) o [selectores CSS](http://www.w3.org/TR/selectors/) en la definición de reglas.
 
 ## Instalación
 
@@ -51,5 +51,10 @@ Para utilizar LockRules debes incluir las siguientes etiquetas en la cabecera de
  <script src="js/MyLockRules.js"></script> 
 ```
 
+## Uso básico
 
+Nota importante: Los ejemplos simulan la ejecución de una llamada AJAX mediente un "timer" de Javascript. De esta forma, evitamos tener que configurar un servidor Web para probar la librería. Ver la sección ["Integración con AJAX"]
+
+
+## (Integración con AJAX)
 
