@@ -101,7 +101,7 @@ El funcionamiento básico de LockRules consiste en lo siguiente:
 
 Podemos verlo gráficamente:
 
-![Ordinograma flujo de bloqueo](https://github.com/surtich/lockRules.js/blob/master/readme_files/lockFlow.png "Ordinograma flujo bloqueo")
+![alt Ordinograma flujo de bloqueo](https://github.com/surtich/lockRules.js/blob/master/readme_files/lockFlow.png "Ordinograma flujo bloqueo")
 
 
 ## Integración con AJAX
