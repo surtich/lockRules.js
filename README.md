@@ -42,7 +42,14 @@ Algunas de las posibles soluciones de la comprobación en el cliente son:
 
 ## Instalación
 
-[LockRules.js](https://github.com/surtich/lockRules.js) requiere [jQuery](http://http://jquery.com/) ######(pendiente comprobar la versión inferior que soportada).
+[LockRules.js](https://github.com/surtich/lockRules.js) requiere [jQuery](http://http://jquery.com/)(pendiente comprobar la versión inferior que soportada).
+
+Para utilizar LockRules debes incluir las siguientes etiquetas en la cabecera de tu página Web:
+
+```js
+ <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+ <script src="js/MyLockRules.js"></script> 
+```
 
 
 
