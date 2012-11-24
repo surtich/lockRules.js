@@ -46,7 +46,7 @@ Algunas de las posibles soluciones de la comprobación en el cliente son:
 
 Para utilizar LockRules debes incluir las siguientes etiquetas en la cabecera de tu página Web:
 
-```js
+```html
  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
  <script src="js/MyLockRules.js"></script> 
 ```
