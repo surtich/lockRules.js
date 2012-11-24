@@ -14,11 +14,11 @@ Ejemplo: Mientras se está procesando la compra de una cesta de productos, se ti
 
 ## Posibles Soluciones 
 
-* En el servidor
+### * En el servidor
 
 Se podría y, por motivos de seguridad, se debería comprobar en el servidor que durante el procesamiento de una petición AJAX no se efectúe una segunda petición que sea incompatible con la primera.
 
-* En el cliente
+### * En el cliente
 
 La comprobación en el servidor podría no ser suficiente en todas las situaciones.
 
