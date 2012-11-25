@@ -191,7 +191,7 @@ doWork(getProducts, {}, 1); //Se ejecutará ya que no hay un atributo lockWord q
 
 Es decir, según lo visto hasta ahora, el funcionamiento de LockRules podría definir así:
 
-`Una función se podrá ejecutar siempre y cuando el atributo *lockWord* del objeto *lock* asociado no coincida (case) con las expresiones regulares definidas en el atributo *regExpLock* de los objetos *lock* asociados a funciones en ejecución.`
+> Una función se podrá ejecutar siempre y cuando el atributo *lockWord* del objeto *lock* asociado no coincida (case) con las expresiones regulares definidas en el atributo *regExpLock* de los objetos *lock* asociados a funciones en ejecución.
 
 **Podemos hacerlo todavía mejor**
 
@@ -316,12 +316,12 @@ Ambas reglas son contradictorias.
 
 Este es otro de los principios de funcionamiento de LockRules:
 
-`Las cadenas de reglas se aplican en **cascada**. La última regla que casa en la cadena es la que determina si se puede o no ejecutar una función.`
+> Las cadenas de reglas se aplican en **cascada**. La última regla que casa en la cadena es la que determina si se puede o no ejecutar una función.
 
 
 ### Inversión de reglas
 
-`La comprobación de la situación de bloqueo, se realiza sobre los objectos *lock* asociados a funciones en ejecución y también sobre el objeto *lock* de la función que se pretende ejecutar.`
+> La comprobación de la situación de bloqueo, se realiza sobre los objectos *lock* asociados a funciones en ejecución y también sobre el objeto *lock* de la función que se pretende ejecutar.`
 
 Esto permite mayor flexibilidad a la hora de definir las reglas de bloqueo.
 
