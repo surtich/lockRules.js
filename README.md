@@ -49,7 +49,7 @@ Para utilizar LockRules debes incluir las siguientes etiquetas en la cabecera de
 
 ## Uso básico
 
-Nota importante: Los ejemplos simulan la ejecución de una llamada AJAX mediente un "timer" de Javascript. De esta forma, evitamos tener que configurar un servidor Web para probar la librería. Ver la sección "Integración con AJAX".
+Nota importante: Los ejemplos simulan la ejecución de una llamada AJAX mediante un "timer" de Javascript. De esta forma, evitamos tener que configurar un servidor Web para probar la librería. Ver la sección "Integración con AJAX".
 
 ### Evitar rellamadas AJAX
 
@@ -120,7 +120,7 @@ Las llamadas a la función *doWork* las podríamos hacer de la siguiente forma:
 doWork(getProducts, lock, 1);
 doWork(getProducts, lock, 1);
 ```
-Al llamar a la función *doWork* la primera vez, se añadirá el objeto *lock* a la lista de bloqueos y, al intentar lo mismo con la siguente función, no se podrá hacer ya que el *lock* de la primera llamada define un bloqueo total.
+Al llamar a la función *doWork* la primera vez, se añadirá el objeto *lock* a la lista de bloqueos y, al intentar lo mismo con la siguiente función, no se podrá hacer ya que el *lock* de la primera llamada define un bloqueo total.
 
 De hecho cualquier intento de llamar a *doWork* con cualquier *lock*, incluso uno vacío, impedirá que se ejecute la función pasada como parámetro.
 
@@ -191,7 +191,7 @@ doWork(getProducts, {}, 1); //Se ejecutará ya que no hay un atributo lockWord q
 
 Es decir, según lo visto hasta ahora, el funcionamiento de LockRules podría definir así:
 
-Una función se podrá ejecutar siempre y cuando el atributo *lockWord* del objeto *lock* asociado no coincida (case) con las expresiones regulares definidas en el atributo *regExpLock* de los objetos *lock* asociados a funciones en ejecución.
+`Una función se podrá ejecutar siempre y cuando el atributo *lockWord* del objeto *lock* asociado no coincida (case) con las expresiones regulares definidas en el atributo *regExpLock* de los objetos *lock* asociados a funciones en ejecución.`
 
 **Podemos hacerlo todavía mejor**
 
@@ -235,7 +235,7 @@ doWork(getProducts, createCategoryLock(2), 2);
 
 Tenemos una función para realizar la compra de productos.
 
-Mientras se están comprando productos no queremos que se pueda modificar la cesta. Por ejemplo, no queremos ni que se puedan añadir ni eliminar prodcutos.
+Mientras se están comprando productos no queremos que se pueda modificar la cesta. Por ejemplo, no queremos ni que se puedan añadir ni eliminar productos.
 
 Puede, sin embargo, que no nos importe que el usuario pueda consultar el importe de la cesta ya que este no se va a modificar durante el proceso de compra.
 
@@ -291,7 +291,7 @@ lock = {
 Observe que en esta solución el atributo *lockRules* ha cambiado para convertirse en un *array* de reglas en vez de ser una única regla.
 
 La primera regla impide que se pueda llamar a comprar dos veces simultaneas.
-La segunda regla impide que se puedan añadir o elliminar productos de la cesta.
+La segunda regla impide que se puedan añadir o eliminar productos de la cesta.
 
 Veamos la segunda:
 
@@ -316,11 +316,28 @@ Ambas reglas son contradictorias.
 
 Este es otro de los principios de funcionamiento de LockRules:
 
-`Las cadenas de reglas se aplican en **cascada**. La última regla que casa en la cadena es la que detarmina si se puede o no ejecutar una función.`
+`Las cadenas de reglas se aplican en **cascada**. La última regla que casa en la cadena es la que determina si se puede o no ejecutar una función.`
 
 
+### Inversión de reglas
 
+`La comprobación de la situación de bloqueo, se realiza sobre los objectos *lock* asociados a funciones en ejecución y también sobre el objeto *lock* de la función que se pretende ejecutar.`
 
+Esto permite mayor flexibilidad a la hora de definir las reglas de bloqueo.
+
+Modifiquemos el ejemplo del apartado anterior para conseguir un resultado similar reducido únicamente a las funciones de comprar y añadir un artículo:
+
+```js
+doWork(checkOut, {lockWord:'checkOut'}); //Ahora no define cadena de reglas de bloqueo
+doWork(addItem, {
+        lockWord:'addItem',    
+        lockRules: {
+            allow: false,
+            regExpLock: /checkOut/
+        }
+    }
+    , 2, 3, 5.6); //Se define una regla de bloqueo que impide que se puedan añadir artculos mientras se est comprando
+```
 
 ## Integración con AJAX
 
