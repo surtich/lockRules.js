@@ -262,12 +262,63 @@ Supongamos que se efectúan las siguientes llamadas:
 
 ```js
 doWork(checkOut, lock);
-doWork(addItem, {}, 2, 3, 5.6);
-doWork(deleteItem, {}, 2);
-doWork(getCost, {});
+doWork(checkOut, lock);
+doWork(addItem, {lockWord:'addItem'}, 2, 3, 5.6);
+doWork(deleteItem, {lockWord:'deleteItem'}, 2);
+doWork(getCost, {lockWord:'getCost'});
 ```
 
-Vamos a proponer distintas definiciones de la variable *lock* que permitan la ejecuci
+Vamos a proponer dos posibles definiciones de la variable *lock* que permitan la ejecución de la primera y de la última llamadas e impida las segunda, tercera y cuarta.
+
+Vamos con la primera:
+
+```js
+lock = {
+    lockWord: 'checkOut',
+    lockRules: [
+        {
+            allow:false,
+            regExpLock: /checkOut/
+        },
+        {
+            allow:false,
+            regExpLock: /Item$/
+        },
+    ]
+};
+```
+
+Observe que en esta solución el atributo *lockRules* ha cambiado para convertirse en un *array* de reglas en vez de ser una única regla.
+
+La primera regla impide que se pueda llamar a comprar dos veces simultaneas.
+La segunda regla impide que se puedan añadir o elliminar productos de la cesta.
+
+Veamos la segunda:
+
+```js
+lock = {
+    lockWord: 'checkOut',
+    lockRules: [
+        {
+            allow:false
+        },
+        {
+            allow:true,
+            regExpLock: /getCost/
+        },
+    ]
+};
+```
+
+La primera regla impide la ejecución de cualquier otra función a través de LockRules.
+La segunda permite la ejecución de la función que consulta el valor de la cesta.
+Ambas reglas son contradictorias.
+
+Este es otro de los principios de funcionamiento de LockRules:
+
+`Las cadenas de reglas se aplican en **cascada**. La última regla que casa en la cadena es la que detarmina si se puede o no ejecutar una función.`
+
+
 
 
 
