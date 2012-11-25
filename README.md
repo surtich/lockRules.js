@@ -83,7 +83,7 @@ function doWork(fnWork, lock, params) {
     fnWork(params);
     $.lockRules('removeLock', lock);
    }
- , 3000, params);
+ , 1000, params);
  } else {
   alert("Proccessing. Try it later")
  }                
@@ -103,7 +103,47 @@ Podemos verlo gráficamente:
 
 ![Ordinograma flujo bloqueo](https://github.com/surtich/lockRules.js/blob/master/readme_files/lockFlow.png "Ordinograma flujo bloqueo")
 
-**El objecto *lock***
+**El objecto lock**
+
+La definición más sencilla que podríamos hacer para el ejemplo anterior sería
+
+```js
+var lock = {
+ lockRules: {
+  allow: false
+ }
+};
+```
+Las llamadas a la función *doWork* las podríamos hacer de la siguiente forma:
+
+```js
+doWork(getProducts, lock, 1);
+doWork(getProducts, lock, 1);
+```
+Al llamar a la función *doWork* la primera vez, se añadirá el objeto *lock* a la lista de bloqueos y, al intentar lo mismo con la siguente función, no se podrá hacer ya que el *lock* de la primera llamada define un bloqueo total.
+
+De hecho cualquier intento de llamar a *doWork* con cualquier *lock*, incluso uno vacío, impedirá que se ejecute la función pasada como parámetro.
+
+```js
+doWork(getProducts, lock, 1);
+doWork(getProducts, {}, 1); //No se ejecutará porque el primer lock bloquea esta llamada
+```
+
+Tras finalizar la ejecución de la primera llamada, se podrá ejecutar la segunda. Simulémoslo:
+
+```js
+doWork(getProducts, lock, 1);
+setTimeout(doWork, 2000, getProducts, {}, 1); //Ahora se podrá ejecutar porque la primera llamada habrá finalizado
+```
+
+**Mejorando la ejecución**
+
+La solución anterior no es del todo satisfactoria.
+
+Hemos evitado que se hagan dos llamadas simultaneas e impedido que se recuperen dos veces los productos de una categoría.
+
+
+
 
 ## Integración con AJAX
 
