@@ -184,13 +184,50 @@ Veamos que ocurre ahora al intentar ejecutar las llamadas anteriores:
 
 ```js
 doWork(getProducts, lock, 1); //Se ejecutará, no hay ningún bloqueo añadido que lo impida
-doWork(getProducts, lock, 1); //No se ejecutará, la llamada anterior, ha incluido un bloqueo que impide la adición de bloqueos en la que haya casamiento entre el atributo lockWord del bloqueo que se quiere añadir y la expresión regular definido en el atributo regExpLock de cualquiera de los bloqueos de funciones en ejecución
+doWork(getProducts, lock, 1); //No se ejecutará, la llamada anterior, ha incluido un bloqueo que impide la adición de bloqueos en los que haya casamiento entre el atributo lockWord del bloqueo que se quiere añadir y la expresión regular definida en su atributo regExpLock
 doWork(getProducts, {lockWord: "getProducts"}, 1); //No se ejecutará por la misma razón anterior
 doWork(getProducts, {}, 1); //Se ejecutará ya que no hay un atributo lockWord que lo impida
 ```
 
+Es decir, según lo visto hasta ahora, el funcionamiento de LockRules podría definir así:
 
+Una función se podrá ejecutar siempre y cuando el atributo *lockWord* del objeto *lock* asociado no coincida (case) con las expresiones regulares definidas en el atributo *regExpLock* de los objetos *lock* asociados a funciones en ejecución.
 
+**Podemos hacerlo todavía mejor**
+
+Supongamos la siguiente situación:
+
+```js
+doWork(getProducts, lock, 1);
+doWork(getProducts, lock, 2);
+```
+
+Con el *lock* anterior, la segunda función no se ejecutará.
+
+Esta situación puede no ser deseable, puede que queramos permitir que se carguen los productos de la categoría 2 mientras lo están haciendo los de la categoría 1.
+
+La solución es sencilla:
+
+Primero creemos la siguiente función:
+
+```js
+function createCategoryLock(numCategory) {
+ return {
+  lockWord: "getProducts" + numCategory,
+  lockRules: {
+   allow: false,
+   regExpLock: new RegExp("getProducts"+numCategory)
+  }
+ }; 
+}
+```
+
+Y luego llamemos a:
+
+```js
+doWork(getProducts, createCategoryLock(1), 1);
+doWork(getProducts, createCategoryLock(2), 2);
+``` 
 
 ## Integración con AJAX
 
