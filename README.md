@@ -6,7 +6,7 @@ Con LockRules, puedes bloquear la llamada a una función de javascript en base a
 
 Cuando se hace una llamada con AJAX hay un tiempo de espera hasta que los datos están disponibles en el cliente.
 
-Durante ese tiempo, el usuario puede interaccionar con la aplicación y realizar diversas acciones como nuevas peticiones AJAX o ejecutar funciones de Javascript en el cliente.
+Durante ese tiempo, el usuario puede interactuar con la aplicación y realizar diversas acciones como: nuevas peticiones AJAX o ejecutar funciones de Javascript en el cliente.
 
 Algunas de estas acciones pueden ser incompatibles con la llamada de AJAX inicial que todavía está en curso.
 
@@ -32,7 +32,7 @@ Algunas de las posibles soluciones de la comprobación en el cliente son:
  
 ## ¿Qué es LockRules.js?
 
-[LockRules.js](https://github.com/surtich/lockRules.js) es un plugin de [jQuery](http://http://jquery.com/) que permite resolver el problema planteado de una forma genérica, flexible, potente y configurable para adaptarse a todas las situaciones que se puedan plantear.
+[LockRules.js](https://github.com/surtich/lockRules.js) es un plugin de [jQuery](http://http://jquery.com/) que permite resolver el problema planteado de una forma genérica, flexible, potente y configurable para adaptarse a la mayoría de situaciones.
 
 [LockRules.js](https://github.com/surtich/lockRules.js) funciona definiendo una serie de reglas que permiten o impiden la ejecución de una función de Javascript. Las reglas se crean utilizando [expresiones regulares](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/RegExp) o [selectores CSS](http://www.w3.org/TR/selectors/).
 
@@ -44,12 +44,12 @@ Para utilizar LockRules debes incluir las siguientes etiquetas en la cabecera de
 
 ```html
  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
- <script src="js/MyLockRules.js"></script> 
+ <script src="js/LockRules.js"></script> 
 ```
 
 ## Uso básico
 
-Nota importante: Los ejemplos simulan la ejecución de una llamada AJAX mediante un "timer" de Javascript. De esta forma, evitamos tener que configurar un servidor Web para probar la librería. Ver la sección "Integración con AJAX".
+Nota importante: Los ejemplos simulan la ejecución de una llamada AJAX mediante un "timer" de Javascript. De esta forma, evitamos tener que configurar un servidor Web para probar la librería. Ver la sección "Integración con AJAX" para su uso con AJAX.
 
 ### Evitar rellamadas AJAX
 
@@ -69,7 +69,7 @@ El segundo "timer" simula una segunda petición de AJAX en la que se vuelven a r
 
 Esta situación se puede plantear si un usuario se cansa de esperar y trata de volver a obtener los productos pensando que de esta forma tendrá una respuesta más rápida. Normalmente querremos evitar situaciones como esta que lo único que van a conseguir es saturar la red. Si no hemos sido cuidadosos al programar la aplicación, es posible que además terminemos teniendo artículos duplicados en la aplicación Web.
 
-Es preferible, que si la red está saturada, se produzca un "timeout" en la petición al servidor y que el usuario intente realizar la operación después de que se le informe del fallo.
+Es preferible que, si la red está saturada, se produzca un *timeout* en la petición al servidor y que el usuario intente realizar la operación después de que se le informe del fallo.
 
 **Solución con LockRules:**
 
@@ -95,8 +95,8 @@ El funcionamiento básico de LockRules consiste en lo siguiente:
 
 1. Comprobar si el *lock* es compatible con los bloqueos actuales llamando a *checkLock*.
 2. Si el *lock* es compatible, añadir el *lock* a los bloqueos actuales llamando *addLock*.                                             
-3. Después llamar a la función.
-4. Por último, borrar el *lock*.
+3. Después, llamar a la función que se quiere ejecutar.
+4. Cuando la función retorne, borrar el *lock*.
 5. Si el *lock* no es compatible, evitar la llamada a la función e informar al usuario.
 
 Podemos verlo gráficamente:
@@ -105,7 +105,7 @@ Podemos verlo gráficamente:
 
 **El objecto lock**
 
-La definición más sencilla que podríamos hacer para el ejemplo anterior sería
+La definición más sencilla que podríamos hacer para el ejemplo anterior sería:
 
 ```js
 var lock = {
@@ -122,7 +122,7 @@ doWork(getProducts, lock, 1);
 ```
 Al llamar a la función *doWork* la primera vez, se añadirá el objeto *lock* a la lista de bloqueos y, al intentar lo mismo con la siguiente función, no se podrá hacer ya que el *lock* de la primera llamada define un bloqueo total.
 
-De hecho cualquier intento de llamar a *doWork* con cualquier *lock*, incluso uno vacío, impedirá que se ejecute la función pasada como parámetro.
+De hecho cualquier intento de llamar a *doWork* con cualquier *lock*, incluso uno vacío, impedirá que se ejecute la función pasada como parámetro:
 
 ```js
 doWork(getProducts, lock, 1);
@@ -189,7 +189,7 @@ doWork(getProducts, {lockWord: "getProducts"}, 1); //No se ejecutará por la mis
 doWork(getProducts, {}, 1); //Se ejecutará ya que no hay un atributo lockWord que lo impida
 ```
 
-Es decir, según lo visto hasta ahora, el funcionamiento de LockRules podría definir así:
+Es decir, según lo visto hasta ahora, el funcionamiento de LockRules se podría definir así:
 
 > Una función se podrá ejecutar siempre y cuando el atributo *lockWord* del objeto *lock* asociado no coincida (case) con las expresiones regulares definidas en el atributo *regExpLock* de los objetos *lock* asociados a funciones en ejecución.
 
@@ -204,7 +204,7 @@ doWork(getProducts, lock, 2);
 
 Con el *lock* anterior, la segunda función no se ejecutará.
 
-Esta situación puede no ser deseable ya que puede que queramos permitir que se carguen los productos de la categoría 2 mientras lo están haciendo los de la categoría 1.
+Esta situación puede no ser deseable ya que quizás queramos permitir que se carguen los productos de la categoría 2 mientras lo están haciendo los de la categoría 1.
 
 La solución es sencilla:
 
@@ -235,7 +235,7 @@ doWork(getProducts, createCategoryLock(2), 2);
 
 Tenemos una función para realizar la compra de productos.
 
-Mientras se están comprando productos no queremos que se pueda modificar la cesta. Por ejemplo, no queremos ni que se puedan añadir ni eliminar productos.
+Mientras se están comprando productos no queremos que se pueda modificar la cesta. Por ejemplo, no queremos que se puedan añadir o eliminar productos.
 
 Puede, sin embargo, que no nos importe que el usuario pueda consultar el importe de la cesta ya que este no se va a modificar durante el proceso de compra.
 
@@ -288,10 +288,10 @@ lock = {
 };
 ```
 
-Observe que en esta solución el atributo *lockRules* ha cambiado para convertirse en un *array* de reglas en vez de ser una única regla.
+Observe que en esta solución el atributo *lockRules* ha cambiado para convertirse en un *array* de reglas de bloqueo en vez de ser una única regla.
 
-La primera regla impide que se pueda llamar a comprar dos veces simultaneas.
-La segunda regla impide que se puedan añadir o eliminar productos de la cesta.
+La primera regla impide que se puedan hacer dos compras simultaneas.
+La segunda regla impide que se puedan añadir o eliminar productos de la cesta durante la realización de la compra.
 
 Veamos la segunda:
 
@@ -321,14 +321,14 @@ Este es otro de los principios de funcionamiento de LockRules:
 
 ### Inversión de reglas
 
-> La comprobación de la situación de bloqueo, se realiza sobre los objectos *lock* asociados a funciones en ejecución y también sobre el objeto *lock* de la función que se pretende ejecutar.`
+> La comprobación de la situación de bloqueo, se realiza sobre los objectos *lock* asociados a funciones en ejecución y también sobre el objeto *lock* asociado a la función que se pretende ejecutar.`
 
 Esto permite mayor flexibilidad a la hora de definir las reglas de bloqueo.
 
 Modifiquemos el ejemplo del apartado anterior para conseguir un resultado similar reducido únicamente a las funciones de comprar y añadir un artículo:
 
 ```js
-doWork(checkOut, {lockWord:'checkOut'}); //Ahora no define cadena de reglas de bloqueo
+doWork(checkOut, {lockWord:'checkOut'}); //Ahora no define una cadena de reglas de bloqueo
 doWork(addItem, {
         lockWord:'addItem',    
         lockRules: {
@@ -336,12 +336,12 @@ doWork(addItem, {
             regExpLock: /checkOut/
         }
     }
-    , 2, 3, 5.6); //Se define una regla de bloqueo que impide que se puedan añadir artculos mientras se est comprando
+    , 2, 3, 5.6); //Se define una regla de bloqueo que impide que se puedan añadir artículos mientras se esté comprando
 ```
 
 ## Integración con AJAX
 
-La integración con llamadas a funciones de AJAX si utlizamos jQuery hace que el uso de LockRules sea muy sencillo. Veamos un ejemplo.
+La integración con llamadas a funciones de AJAX a trvés jQuery hace que el uso de LockRules sea muy sencillo. Veamos un ejemplo.
 
 
 La llamada a AJAX con jQuery la podríamos hacer de la siguiente manera:
@@ -362,9 +362,9 @@ $.ajax({
 }).done(...);
 ```
 
-Observe que en el objeto *settings* que le pasamos a la función *ajax* de jQuery, hemos incluido un atributo *lock*.
+Observe que en el objeto *settings*, que le pasamos a la función *ajax* de jQuery, hemos incluido un atributo *lock*.
 
-Una forma de procesar genéricamente estos atributos *lock* es utilizar la función de jQuery *ajaxPrefilter* que se efectúa antes de llamar cualquier llamada de AJAX y que nos brinda la oportunidad de gestionar los bloqueos y decidir si efectuar o no la llamada a la función.
+Una forma de procesar genéricamente estos atributos *lock* es utilizar la función de jQuery *ajaxPrefilter* que se efectúa antes de llamar a cualquier función AJAX y que nos brinda la oportunidad de gestionar los bloqueos y decidir si efectuar o no la llamada a la función.
 
 
 Veamos como podríamos hacerlo:
@@ -388,3 +388,10 @@ $(document).ready(
  }
 );
 ```
+
+De esta forma tenemos un único sitio donde gestionar los bloqueos y de lo único que nos tenemos que ocupar es de definir el atributo *lock* en las llamadas AJAX.
+
+## Usos avanzados
+
+[LockRules.js](https://github.com/surtich/lockRules.js) tiene otras muchas posibilidades que se irán contando conforme se vaya elaborando esta documentación.
+
