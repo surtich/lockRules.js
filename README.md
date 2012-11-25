@@ -142,6 +142,53 @@ La solución anterior no es del todo satisfactoria.
 
 Hemos evitado que se hagan dos llamadas simultaneas e impedido que se recuperen dos veces los productos de una categoría.
 
+Pero también hemos impedido que se efectúe cualquier otra llamada a la función *doWork*.
+
+Estamos produciendo un bloqueo total de cualquier función que utilice la librería LockRules.
+
+Veamos un ejemplo:
+
+Supongamos que hay una función que devuelve el precio de la cesta de la compra:
+
+```js
+function getCost() {
+ alert("40,6€");
+}
+```
+
+Y que intentamos realizar de forma simultanea estas llamadas:
+
+```js
+doWork(getProducts, lock, 1);
+doWork(getCost, {}); //la primera llamada bloquea la segunda
+```
+
+Esta situación no es probablemente deseable; en principio, no hay ninguna razón para impedir que el usuario conozca el valor de la cesta de la compra mientras se cargan los productos de una categoría.
+
+Afortunadamente [LockRules.js](https://github.com/surtich/lockRules.js) está diseñado para lidiar con estas situaciones y otras mucho más complejas.
+
+Para ello debemos cambiar la definición de nuestro objeto *lock*.
+
+```js
+var lock = {
+ lockWord: "getProducts",
+ lockRules: {
+  allow: false,
+  regExpLock: /getProducts/
+ }
+};
+```
+Observe que la regla de bloqueo incluye un nuevo atributo llamado *regExpLock* y que el objeto *lock* también tiene un atributo nuevo, *lockWord*.
+
+Veamos que ocurre ahora al intentar ejecutar las llamadas anteriores:
+
+```js
+doWork(getProducts, lock, 1); //Se ejecutará, no hay ningún bloqueo añadido que lo impida
+doWork(getProducts, lock, 1); //No se ejecutará, la llamada anterior, ha incluido un bloqueo que impide la adición de bloqueos en la que haya casamiento entre el atributo lockWord del bloqueo que se quiere añadir y la expresión regular definido en el atributo regExpLock de cualquiera de los bloqueos de funciones en ejecución
+doWork(getProducts, {lockWord: "getProducts"}, 1); //No se ejecutará por la misma razón anterior
+doWork(getProducts, {}, 1); //Se ejecutará ya que no hay un atributo lockWord que lo impida
+```
+
 
 
 
