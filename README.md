@@ -204,7 +204,7 @@ doWork(getProducts, lock, 2);
 
 Con el *lock* anterior, la segunda función no se ejecutará.
 
-Esta situación puede no ser deseable, puede que queramos permitir que se carguen los productos de la categoría 2 mientras lo están haciendo los de la categoría 1.
+Esta situación puede no ser deseable ya que puede que queramos permitir que se carguen los productos de la categoría 2 mientras lo están haciendo los de la categoría 1.
 
 La solución es sencilla:
 
@@ -227,7 +227,49 @@ Y luego llamemos a:
 ```js
 doWork(getProducts, createCategoryLock(1), 1);
 doWork(getProducts, createCategoryLock(2), 2);
-``` 
+```
+
+### Cadenas de reglas
+
+**Supongamos la siguiente situación:**
+
+Tenemos una función para realizar la compra de productos.
+
+Mientras se están comprando productos no queremos que se pueda modificar la cesta. Por ejemplo, no queremos ni que se puedan añadir ni eliminar prodcutos.
+
+Puede, sin embargo, que no nos importe que el usuario pueda consultar el importe de la cesta ya que este no se va a modificar durante el proceso de compra.
+
+Supongamos que estas son las funciones:
+
+```js
+function checkOut() {
+ alert("Buying...");
+}
+            
+function addItem(numProduct, quantity, price) {
+ alert("addItem " + numProduct); 
+}
+            
+function deleteItem(numProduct) {
+ alert("deleteItem " +numProduct);
+}
+
+function getCost() {
+ alert("40,6€");
+}
+```
+Supongamos que se efectúan las siguientes llamadas:
+
+```js
+doWork(checkOut, lock);
+doWork(addItem, {}, 2, 3, 5.6);
+doWork(deleteItem, {}, 2);
+doWork(getCost, {});
+```
+
+Vamos a proponer distintas definiciones de la variable *lock* que permitan la ejecuci
+
+
 
 ## Integración con AJAX
 
