@@ -251,7 +251,7 @@ function addItem(numProduct, quantity, price) {
 }
             
 function deleteItem(numProduct) {
- alert("deleteItem " +numProduct);
+ alert("deleteItem " + numProduct);
 }
 
 function getCost() {
@@ -341,3 +341,50 @@ doWork(addItem, {
 
 ## Integración con AJAX
 
+La integración con llamadas a funciones de AJAX si utlizamos jQuery hace que el uso de LockRules sea muy sencillo. Veamos un ejemplo.
+
+
+La llamada a AJAX con jQuery la podríamos hacer de la siguiente manera:
+
+```js
+$.ajax({
+ url:"./php/getProducts.php",
+ data: numCategory,
+ dataType: "json",
+ type:"GET",
+ lock:{
+  lockWord: "getCategory" + numCategory,
+  lockRules: {
+   allow: false,
+   regExpLock: new RegExp("getCategory" + numCategory)
+  }                         
+ } 
+}).done(...);
+```
+
+Observe que en el objeto *settings* que le pasamos a la función *ajax* de jQuery, hemos incluido un atributo *lock*.
+
+Una forma de procesar genéricamente estos atributos *lock* es utilizar la función de jQuery *ajaxPrefilter* que se efectúa antes de llamar cualquier llamada de AJAX y que nos brinda la oportunidad de gestionar los bloqueos y decidir si efectuar o no la llamada a la función.
+
+
+Veamos como podríamos hacerlo:
+
+```js
+$(document).ready(
+ function () {
+  $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {  
+   if (options.hasOwnProperty("lock")) {
+    if (!$.lockRules('addLock', options.lock)) { //La función addLock realiza una comprobación previa llamando a checkLock. El lock no se añadiría si hubiera bloqueo.
+     jqXHR.abort();
+    } else {
+     jqXHR.always(
+      function() {
+       $.lockRules('removeLock', options.lock);      
+      }      
+     )
+    }
+   }
+  });
+ }
+);
+```
